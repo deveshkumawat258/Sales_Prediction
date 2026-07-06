@@ -17,8 +17,14 @@ sales_prediction/
 │   ├── model_comparison.png
 │   ├── residuals_distribution.png
 │   └── spend_vs_sales.png
+├── public/                   # Web application frontend
+│   ├── index.html            /* Interactive dashboard layout */
+│   ├── style.css             /* Translucent glassmorphic dark styling */
+│   └── app.js                /* AJAX endpoints integration & Chart.js plots */
 ├── src/
+│   ├── app.py                # FastAPI web server and API endpoints
 │   ├── create_notebook.py    # Script to generate the Jupyter Notebook
+│   ├── optimize.py           # Budget allocation optimization engine (SciPy)
 │   └── train.py              # Modular training pipeline
 ├── README.md                 # Project instructions
 ├── Sales_Prediction.ipynb    # Jupyter Notebook containing full EDA & modeling
@@ -40,6 +46,13 @@ To run exploratory data analysis, train models, select the best model, save it, 
 ```bash
 python src/train.py
 ```
+
+### 3. Launch the Interactive Web Dashboard
+To start the FastAPI server and explore prediction and budget optimization interactively:
+```bash
+python -m uvicorn src.app:app --reload
+```
+Once the server starts, open your browser and navigate to **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
 
 ---
 

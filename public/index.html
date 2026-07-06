@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAd | Sales Predictor & Budget Optimizer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="stars-bg"></div>
+    <div class="glowing-orb orb-1"></div>
+    <div class="glowing-orb orb-2"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">📊</span>
+                <div class="logo-text">
+                    <h1>SmartAd</h1>
+                    <p>AI-Powered Sales Prediction & Spend Optimization</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator online"></span>
+                <span class="status-text">GB-Regressor Core Active</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- Left Panel: Interactive Predictor -->
+            <section class="card glass-card predictor-card">
+                <div class="card-header">
+                    <h2>🎯 Real-Time Sales Predictor</h2>
+                    <p>Adjust marketing channel spends to see the forecasted sales volume immediately.</p>
+                </div>
+                
+                <div class="sliders-container">
+                    <!-- TV Slider -->
+                    <div class="slider-group tv-group">
+                        <div class="slider-label">
+                            <span class="channel-name"><span class="badge badge-tv">TV</span> Spend</span>
+                            <div class="val-input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="tv-num" min="0" max="300" step="0.1" value="150.0">
+                                <span class="unit">k</span>
+                            </div>
+                        </div>
+                        <input type="range" id="tv-range" min="0" max="300" step="0.1" value="150.0" class="custom-slider tv-slider">
+                        <div class="slider-bounds">
+                            <span>$0k</span>
+                            <span>Max: $300k</span>
+                        </div>
+                    </div>
+
+                    <!-- Radio Slider -->
+                    <div class="slider-group radio-group">
+                        <div class="slider-label">
+                            <span class="channel-name"><span class="badge badge-radio">Radio</span> Spend</span>
+                            <div class="val-input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="radio-num" min="0" max="50" step="0.1" value="25.0">
+                                <span class="unit">k</span>
+                            </div>
+                        </div>
+                        <input type="range" id="radio-range" min="0" max="50" step="0.1" value="25.0" class="custom-slider radio-slider">
+                        <div class="slider-bounds">
+                            <span>$0k</span>
+                            <span>Max: $50k</span>
+                        </div>
+                    </div>
+
+                    <!-- Newspaper Slider -->
+                    <div class="slider-group newspaper-group">
+                        <div class="slider-label">
+                            <span class="channel-name"><span class="badge badge-newspaper">Newspaper</span> Spend</span>
+                            <div class="val-input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="newspaper-num" min="0" max="120" step="0.1" value="30.0">
+                                <span class="unit">k</span>
+                            </div>
+                        </div>
+                        <input type="range" id="newspaper-range" min="0" max="120" step="0.1" value="30.0" class="custom-slider newspaper-slider">
+                        <div class="slider-bounds">
+                            <span>$0k</span>
+                            <span>Max: $120k</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Prediction Output -->
+                <div class="prediction-display">
+                    <div class="display-label">Expected Sales Volume</div>
+                    <div class="display-value-wrapper">
+                        <span class="display-value" id="live-sales-val">0.00</span>
+                        <span class="display-unit">Units (x1000)</span>
+                    </div>
+                    <div class="confidence-indicator">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 98.31%;"></div>
+                        </div>
+                        <span class="confidence-text">Model Confidence: 98.31% (GBR)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Budget Optimizer -->
+            <section class="card glass-card optimizer-card">
+                <div class="card-header">
+                    <h2>🚀 Advertising Spend Optimizer</h2>
+                    <p>Enter your total budget to mathematically calculate the allocation that maximizes sales.</p>
+                </div>
+
+                <div class="optimizer-input-group">
+                    <label for="budget-input">Total Available Marketing Budget ($)</label>
+                    <div class="input-action-row">
+                        <div class="budget-input-wrapper">
+                            <span class="currency-large">$</span>
+                            <input type="number" id="budget-input" min="10" max="470" value="100" placeholder="e.g. 150">
+                            <span class="unit-large">k</span>
+                        </div>
+                        <button id="optimize-btn" class="glow-button">Optimize Allocation</button>
+                    </div>
+                    <span class="input-helper">Historical limit: $470k (total bounds)</span>
+                </div>
+
+                <!-- Optimization Results -->
+                <div id="optimization-results" class="results-layout hidden">
+                    <div class="results-metrics">
+                        <div class="result-metric-card">
+                            <span class="label">Forecasted Sales</span>
+                            <span class="value" id="opt-sales-val">0.00</span>
+                            <span class="subtext">Units (x1000)</span>
+                        </div>
+                        <div class="result-metric-card">
+                            <span class="label">Total Spend</span>
+                            <span class="value" id="opt-spend-val">$0.0k</span>
+                            <span class="subtext">Allocated Budget</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-and-legend">
+                        <div class="chart-container">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                        <div class="allocation-breakdown">
+                            <div class="breakdown-item tv-break">
+                                <span class="dot"></span>
+                                <span class="name">TV Spend:</span>
+                                <span class="val" id="opt-tv-val">$0.00k</span>
+                                <span class="pct" id="opt-tv-pct">0%</span>
+                            </div>
+                            <div class="breakdown-item radio-break">
+                                <span class="dot"></span>
+                                <span class="name">Radio Spend:</span>
+                                <span class="val" id="opt-radio-val">$0.00k</span>
+                                <span class="pct" id="opt-radio-pct">0%</span>
+                            </div>
+                            <div class="breakdown-item newspaper-break">
+                                <span class="dot"></span>
+                                <span class="name">Newspaper:</span>
+                                <span class="val" id="opt-news-val">$0.00k</span>
+                                <span class="pct" id="opt-news-pct">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="apply-opt-btn" class="secondary-button">Apply to Predictor Sliders</button>
+                </div>
+                
+                <div id="optimizer-empty-state" class="empty-state">
+                    <div class="empty-icon">📈</div>
+                    <p>Enter a budget above and run the optimizer to calculate the best spending strategy across channels.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Insights and Analytics Section -->
+        <section class="card glass-card analytics-section">
+            <div class="card-header">
+                <h2>🔍 AI Campaign Insights & Attribution</h2>
+                <p>Derived attribution weights and impact analysis from historical models.</p>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="attribution-chart-wrapper">
+                    <canvas id="attributionChart"></canvas>
+                </div>
+                
+                <div class="insights-bullets">
+                    <div class="bullet-card">
+                        <div class="bullet-icon">💡</div>
+                        <div class="bullet-content">
+                            <h3>TV drives baseline volume</h3>
+                            <p>TV spend has a <strong>61.8% predictive importance</strong>. Increasing TV budgets ensures stable long-term reach and high baseline sales volumes.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-card">
+                        <div class="bullet-icon">⚡</div>
+                        <div class="bullet-content">
+                            <h3>Radio delivers high efficiency</h3>
+                            <p>Radio shows a very high marginal return per dollar. With <strong>34.6% relative importance</strong>, allocating budget here offers rapid scaling returns.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-card">
+                        <div class="bullet-icon">⚠️</div>
+                        <div class="bullet-content">
+                            <h3>Newspaper spend is redundant</h3>
+                            <p>Newspaper advertising accounts for only <strong>3.5% of sales predictive power</strong>. Reallocating print newspaper spend to TV or Radio yields immediate revenue increases without cost overheads.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SmartAd Dashboard &copy; 2026. Made with 🤍 by Harsh (Junior Developer, Antigravity AI). CodeAlpha Task 4.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
